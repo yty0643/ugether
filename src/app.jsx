@@ -1,9 +1,11 @@
-import './app.css';
+import React from "react";
 
-function App() {
+const App = (props) => {
   return (
-    <h1> hello </h1>
+    <div>
+      <div>aa</div>
+    </div>
   );
-}
+};
 
 export default App;
