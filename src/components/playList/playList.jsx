@@ -1,7 +1,7 @@
 import React from "react";
 
 const PlayList = (props) => {
-  <div>playList</div>;
+  return <div>playList</div>;
 };
 
 export default PlayList;
