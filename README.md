@@ -1,70 +1,57 @@
-# Getting Started with Create React App
+# error 해결 과정
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+KAKAO REST API로 SignIn 구현중 fetch를 통해 https://kauth.kakao.com/oauth/authorize를 비동기 통신 방식으로 호출했다.
 
-## Available Scripts
+    fetch(
+    `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=http://localhost:3000`
+    );
 
-In the project directory, you can run:
+결과
+Access to fetch at 'https://accounts.kakao.com/login?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttp%253A%252F%252Flocalhost%253A3000%26client_id%3D1709c427adddf6bb6a6c0fbe29a8922c' (redirected from 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=1709c427adddf6bb6a6c0fbe29a8922c&redirect_uri=http://localhost:3000') from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
+app.jsx:11 GET https://accounts.kakao.com/login?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttp%253A%252F%252Flocalhost%253A3000%26client_id%3D1709c427adddf6bb6a6c0fbe29a8922c net::ERR_FAILED 200
+app.jsx:11 Uncaught (in promise) TypeError: Failed to fetch
 
-### `yarn start`
+해결
+https://kauth.kakao.com/oauth/authorize은 redirect_uri로 리다이렉트 되기 때문에 HTML 링크로 구현하거나 SDK를 사용해야 한다.
+본 프로젝트에서는 a태그를 사용해서 구현했다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    const kakaoURL = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=http://localhost:3000`;
+    <a href={kakaoURL}>kakao SignIn</a>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+KAKAO REST API로 SignIn 토큰 받기 중에 에러가 발생했다.
 
-### `yarn test`
+    fetch(`https://kauth.kakao.com/oauth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify({
+        grant_type: "authorization_code",
+        client_secret: process.env.REACT_APP_CLIENT_SECRET,
+        client_id: process.env.REACT_APP_CLIENT_ID,
+        redirect_uri: REDIRECT_URI,
+        code: AUTHORIZE_CODE,
+      }),
+    })
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+결과
+app.jsx:15
+POST https://kauth.kakao.com/oauth/token 401 (Unauthorized)
+app.jsx:15
+{error: 'invalid_client', error_description: 'Bad client credentials', error_code: 'KOE010'}
+error: "invalid_client"
+error_code: "KOE010"
+error_description: "Bad client credentials"
+[[Prototype]]: Object
 
-### `yarn build`
+해결
+KAKAO 문서에 아주 작게 QueryString 형식으로 인가 코드를 전달 받는다고 작성되어 있었다.
+따라서 body를 JSON.stringify형식이 아닌 QueryString형식으로 수정했고 곧바로 해결되었다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    fetch(`https://kauth.kakao.com/oauth/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `grant_type=authorization_code&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&code=${AUTHORIZE_CODE}`,
+    })
