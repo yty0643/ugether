@@ -5,18 +5,43 @@ import Header from "./components/header/header";
 import PlayList from "./components/playList/playList";
 
 const App = ({ kakaoService }) => {
+  const myStorage = window.localStorage;
+  const myLocation = window.location;
+  const [token, setToken] = useState(
+    JSON.parse(window.localStorage.getItem("token"))
+  );
+  const [user, setUser] = useState();
+
   const signIn = () => {
-    kakaoService.getAuthCode();
+    kakaoService.signIn();
+  };
+
+  const signOut = () => {
+    kakaoService.signOut();
+    myLocation.href = "/";
+    myStorage.removeItem("token");
+    setToken("");
   };
 
   useEffect(() => {
-    if (!window.location.search) return;
-    const authCode = window.location.search.split("=")[1];
+    if (myStorage.getItem("token") == "undefined")
+      myStorage.removeItem("token");
+    if (myStorage.getItem("token")) return;
+    if (!myLocation.search) return;
+    const AUTHORIZE_CODE = myLocation.search.split("=")[1];
     kakaoService //
-      .getToken(authCode)
-      .then((res) => kakaoService.getUser(res.access_token))
-      .then((res) => console.log(res));
-  }, [window.location]);
+      .createAccessToken(AUTHORIZE_CODE)
+      .then((res) => {
+        myStorage.setItem("token", JSON.stringify(res.access_token));
+        setToken(res.access_token);
+      });
+  }, [myLocation.search]);
+
+  useEffect(() => {
+    if (!token) return;
+    kakaoService.setAccessToken(token);
+    kakaoService.getUser(setUser);
+  }, [token]);
 
   return (
     <div>
@@ -24,7 +49,8 @@ const App = ({ kakaoService }) => {
       <PlayList />
       <Chat />
       <Footer />
-      <button onClick={signIn}>signIn</button>
+      <button onClick={signIn}>IN</button>
+      <button onClick={signOut}>OUT</button>
     </div>
   );
 };

@@ -1,28 +1,57 @@
 class Kakao{
-    
-    getAuthCode() {
-        window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
-    }
 
-    async getToken(AUTHORIZE_CODE) {
-        const res = await fetch(`https://kauth.kakao.com/oauth/token`, {
+    async createAccessToken(AUTHORIZE_CODE) {
+        const res = await fetch("https://kauth.kakao.com/oauth/token", {
             method: "POST",
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `grant_type=authorization_code&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&code=${AUTHORIZE_CODE}`,
+            body: `grant_type=authorization_code&client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&code=${AUTHORIZE_CODE}`,
         })
+        
         return await res.json();
     }
 
-    async getUser(ACCESS_TOKEN) {
-        const res = await fetch('https://kapi.kakao.com/v2/user/me', {
-            headers: {
-                'Authorization': `Bearer ${ACCESS_TOKEN}`
-            }
+    getAccessToken() {
+        return window.Kakao.Auth.getAccessToken();
+    }
+
+    setAccessToken(ACCESS_TOKEN) {
+        window.Kakao.Auth.setAccessToken(ACCESS_TOKEN);
+    }
+
+    signIn() {
+        window.Kakao.Auth.authorize({
+            redirectUri: `${process.env.REACT_APP_REDIRECT_URI}`,
         });
-        return await res.json();
     }
-}
 
+    signOut() {
+        if (!window.Kakao.Auth.getAccessToken()) {
+            console.log("Not logged in.");
+            return;
+        }
+        window.Kakao.Auth.logout(function () {
+            console.log("Logged out");
+        });
+    }
+
+    getUser(setUser) {
+        window.Kakao.API.request({
+            url: "/v2/user/me",
+            data: {
+              property_keys: ["kakao_account.profile"],
+            },
+            success: function (response) {
+              const nickname = response.kakao_account.profile.nickname;
+              const thumbnail = response.kakao_account.profile.thumbnail_image_url;
+              setUser({ nickname, thumbnail });
+            },
+            fail: function (error) {
+              console.log(error);
+            },
+        });
+    }
+    
+}
 export default Kakao;
