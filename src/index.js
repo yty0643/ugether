@@ -11,7 +11,7 @@ const dbService = new Database(database);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App kakaoService={kakaoService} dbService={dbService}/>
+    <App kakaoService={kakaoService} dbService={dbService} />
   </React.StrictMode>,
   document.getElementById('root')
 );
