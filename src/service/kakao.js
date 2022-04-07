@@ -40,12 +40,13 @@ class Kakao{
         window.Kakao.API.request({
             url: "/v2/user/me",
             data: {
-              property_keys: ["kakao_account.profile"],
+                property_keys: ["kakao_account.profile", "kakao_account.email"],
             },
             success: function (response) {
-              const nickname = response.kakao_account.profile.nickname;
-              const thumbnail = response.kakao_account.profile.thumbnail_image_url;
-              setUser({ nickname, thumbnail });
+                const nickname = response.kakao_account.profile.nickname;
+                const thumbnail = response.kakao_account.profile.thumbnail_image_url;
+                const email = response.kakao_account.email;
+                setUser({ nickname, thumbnail, email: email.split('.')[0] });
             },
             fail: function (error) {
               console.log(error);
