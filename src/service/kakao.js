@@ -36,25 +36,26 @@ class Kakao{
         });
     }
 
-    getUser(setUser) {
-        let ret;
-        return window.Kakao.API.request({
+    async getUser() {
+        
+        const res = await window.Kakao.API.request({
             url: "/v2/user/me",
             data: {
                 property_keys: ["kakao_account.profile", "kakao_account.email"],
             },
-            success: function (response) {
-                const nickname = response.kakao_account.profile.nickname;
-                const thumbnail = response.kakao_account.profile.thumbnail_image_url;
-                const email = response.kakao_account.email.split('.')[0];
-                setUser({ nickname, thumbnail, email });
-                ret = email;
-            },
             fail: function (error) {
                 console.log(error);
             },
-        }).then(() => ret)
+        })
+            .then(res => ({
+                "email": res.kakao_account.email.split(".")[0],
+                "name": res.kakao_account.profile.nickname,
+                "imgae": res.kakao_account.profile.profile_image_url,
+                "img": res.kakao_account.profile.thumbnail_image_url,
+            }))
+        return await res;
     }
     
 }
 export default Kakao;
+

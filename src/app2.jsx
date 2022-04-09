@@ -23,13 +23,6 @@ const App = ({ kakaoService, dbService }) => {
     kakaoService.signIn();
   };
 
-  const signOut = () => {
-    kakaoService.signOut();
-    myLocation.href = "/";
-    myStorage.removeItem("token");
-    setToken("");
-  };
-
   const sendMsg = () => {
     window.Kakao.Link.sendDefault({
       objectType: "text",
@@ -125,3 +118,37 @@ const App = ({ kakaoService, dbService }) => {
 };
 
 export default App;
+
+// const link = () => {
+//   if (codeRef.current.value == user.email) return;
+//   dbService
+//     .read(codeRef.current.value)
+//     .then((res) => {
+//       if (!res) throw new Error("No data");
+//       dbService.update(user.email, "partner", codeRef.current.value);
+//       dbService.observer(user.email, codeRef.current.value, setIsLink);
+//     })
+//     .catch((error) => console.log(error));
+//   //observer 생성한 이후 input 상호작용x
+//   //에러발생시 input비우기
+// };
+
+// useEffect(() => {
+//   if (!user) return;
+//   dbService //
+//     .read(user.email)
+//     .then((res) => {
+//       let ret;
+//       if (!res) {
+//         dbService.write(...Object.values(user));
+//         dbService.read(user.email).then((res) => (ret = res));
+//       } else {
+//         ret = res;
+//       }
+//       return ret;
+//     })
+//     .then((res) => {
+//       if (res.isLink) setIsLink(true);
+//       dbService.observer(user.email, res.partner, setIsLink);
+//     });
+// }, [user]);

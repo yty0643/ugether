@@ -35,12 +35,21 @@ class Database{
         return update(ref(db), updates);
     }
 
-    observer(email, partner, setState) { //partner이메일로 바꿔야함.
+    linkObserver(email, partner, setState) { //partner이메일로 바꿔야함.
         const db = getDatabase();
         const partnerRef = ref(db, `users/${partner}/partner`);
         onValue(partnerRef, (snapshot) => {
             const data = snapshot.val();
-            if (email == data) setState(true);
+            if (email == data) setState();
+        });
+    }
+
+    partnerObserver(partner, setState) {
+        const db = getDatabase();
+        const partnerRef = ref(db, `users/${partner}`);
+        onValue(partnerRef, (snapshot) => {
+            const data = snapshot.val();
+            setState(data);
         });
     }
 }
