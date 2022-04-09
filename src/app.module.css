@@ -2,9 +2,5 @@
 
 .app{
     font-family: 'Nanum Gothic', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 100vh;
 }

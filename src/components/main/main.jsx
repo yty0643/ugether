@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../header/header";
 import Link from "../link/link";
 import styles from "./main.module.css";
 
@@ -8,6 +9,8 @@ const Main = ({ kakaoService, dbService }) => {
     JSON.parse(window.localStorage.getItem("token"))
   );
   const [user, setUser] = useState(); //email, name, image, img(thumbnail)
+  const [pEmail, setPEmail] = useState();
+  const [partner, setPartner] = useState();
   const [isLink, setIsLink] = useState();
   const navigate = useNavigate();
 
@@ -58,6 +61,7 @@ const Main = ({ kakaoService, dbService }) => {
     kakaoService.getUser().then((res) => {
       setUser(res);
       dbService.read(res.email).then((res) => {
+        setPEmail(res.partner);
         email = res.email;
         if (!res) throw new Error("No data");
         setIsLink(res.isLink);
@@ -75,11 +79,12 @@ const Main = ({ kakaoService, dbService }) => {
 
   useEffect(() => {
     if (!isLink) return;
-    // dbService.partnerObserver()
+    dbService.partnerObserver(pEmail, setPartner);
   }, [isLink]);
 
   return (
-    <div className={styles.Main}>
+    <div className={styles.main}>
+      <Header user={user} partner={partner} />
       <button onClick={signOut}>SignOut</button>
       {isLink == false && <Link user={user} userLink={userLink} />}
     </div>

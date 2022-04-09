@@ -1,17 +1,17 @@
 import React from "react";
 import styles from "./header.module.css";
 
-const Header = ({ nickname, thumbnail, email }) => {
+const Header = ({ user, partner }) => {
   return (
     <header className={styles.header}>
-      <div>logo div</div>
-      <div>search div</div>
+      <div>logo</div>
+      <div>search</div>
       <div>
         <button>
-          <img src="" alt="" />
+          <img src={user.img} />
         </button>
         <button>
-          <img src={thumbnail} alt="" />
+          <img src="" alt="" />
         </button>
       </div>
     </header>
