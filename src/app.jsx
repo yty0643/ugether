@@ -4,11 +4,15 @@ import Login from "./components/login/login";
 import Main from "./components/main/main";
 import styles from "./app.module.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { faTwitter, faFontAwesome } from "@fortawesome/free-brands-svg-icons";
+import {
+  faUser,
+  faVideo,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //필요한 컴포넌트에서 import
 import Test from "./test";
-library.add(faUser, faTwitter, faFontAwesome);
+library.add(faUser, faVideo, faGithub, faMagnifyingGlass);
 
 const App = ({ kakaoService, dbService }) => {
   return (

@@ -12,6 +12,7 @@ const Main = ({ kakaoService, dbService }) => {
   const [pEmail, setPEmail] = useState();
   const [partner, setPartner] = useState();
   const [isLink, setIsLink] = useState();
+  const [user_menu, setUser_menu] = useState(false);
   const navigate = useNavigate();
 
   const signOut = () => {
@@ -90,14 +91,19 @@ const Main = ({ kakaoService, dbService }) => {
   }, [token]);
 
   useEffect(() => {
-    if (!isLink) return;
+    if (!pEmail) return;
     dbService.partnerObserver(pEmail, setPartner);
-  }, [isLink]);
+  }, [pEmail]);
 
   return (
     <div className={styles.main}>
-      <Header user={user} partner={partner} />
-      <button onClick={signOut}>SignOut</button>
+      <Header
+        user={user}
+        partner={partner}
+        user_menu={user_menu}
+        setUser_menu={setUser_menu}
+        signOut={signOut}
+      />
       {isLink == false && <Link user={user} userLink={userLink} />}
     </div>
   );
