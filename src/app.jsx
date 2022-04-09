@@ -12,7 +12,7 @@ library.add(faUser, faTwitter, faFontAwesome);
 const App = ({ kakaoService, dbService }) => {
   return (
     <div className={styles.app}>
-      <BrowserRouter>
+      <BrowserRouter basename="/ugether">
         <Routes>
           <Route
             path="/"
