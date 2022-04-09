@@ -7,12 +7,14 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faTwitter, faFontAwesome } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //필요한 컴포넌트에서 import
+import Test from "./test";
 library.add(faUser, faTwitter, faFontAwesome);
 
 const App = ({ kakaoService, dbService }) => {
   return (
     <div className={styles.app}>
-      <BrowserRouter basename="/ugether">
+      {/* basename="/ugether" */}
+      <BrowserRouter>
         <Routes>
           <Route
             path="/"
@@ -24,6 +26,7 @@ const App = ({ kakaoService, dbService }) => {
             path="/main"
             element={<Main kakaoService={kakaoService} dbService={dbService} />}
           />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </BrowserRouter>
     </div>

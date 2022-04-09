@@ -2,16 +2,17 @@ import { getDatabase, ref, set, child, get, update, onValue } from "firebase/dat
 
 class Database{
 
-    write(nickname, thumbnail, email) {
+    write(email, name, image, img) {
         const db = getDatabase();
-        set(ref(db, `users/${email}`), {
-            nickname,
-            thumbnail,
+        return set(ref(db, `users/${email}`), {
             email,
+            name,
+            image,
+            img,
             partner: "",
             isOnline: false,
             isLink: false,
-        });
+        })
     }
 
     async read(email) {
@@ -22,7 +23,7 @@ class Database{
                 if (snapshot.exists()) {
                     return snapshot.val();
                 } else {
-                    return false;
+                    throw Error("1", "No data");
                 }
             })
         return res;

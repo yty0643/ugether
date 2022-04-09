@@ -46,32 +46,44 @@ const Main = ({ kakaoService, dbService }) => {
     dbService
       .read(email)
       .then((res) => {
-        if (!res) throw new Error("No data");
         dbService.update(user.email, "partner", email);
         dbService.linkObserver(user.email, email, () => {
-          setIsLink(true);
           dbService.update(user.email, "isLink", true);
+          setIsLink(true);
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => alert("Wrong code!"));
   };
 
   useEffect(() => {
-    let email;
-    kakaoService.getUser().then((res) => {
-      setUser(res);
-      dbService.read(res.email).then((res) => {
-        setPEmail(res.partner);
-        email = res.email;
-        if (!res) throw new Error("No data");
-        setIsLink(res.isLink);
-      });
-      dbService.update(res.email, "isOnline", true);
-    });
-    return () => {
-      dbService.update(email, "isOnline", false);
-    };
+    kakaoService //
+      .getUser()
+      .then((res) => setUser(res));
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    dbService //
+      .read(user.email)
+      .then((res) => {
+        setIsLink(res.isLink);
+        setPEmail(res.partner);
+        dbService.update(user.email, "isOnline", true);
+      })
+      .catch((error) => {
+        console.log(error);
+        dbService //
+          .write(...Object.values(user))
+          .then(() => {
+            setIsLink(false);
+            setPEmail("");
+            dbService.update(user.email, "isOnline", true);
+          });
+      });
+    return () => {
+      dbService.update(user.email, "isOnline", false);
+    };
+  }, [user]);
 
   useEffect(() => {
     if (!token) navigate("/");

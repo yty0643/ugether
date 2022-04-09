@@ -4,7 +4,8 @@ import styles from "./login.module.css";
 
 const Login = ({ kakaoService, dbService }) => {
   const [token, setToken] = useState(
-    JSON.parse(window.localStorage.getItem("token"))
+    window.localStorage.getItem("token") != "undefined" &&
+      JSON.parse(window.localStorage.getItem("token"))
   );
   const navigate = useNavigate();
   const storage = window.localStorage;

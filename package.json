@@ -18,7 +18,7 @@
     "react-scripts": "5.0.0",
     "web-vitals": "^2.1.0"
   },
-  "homepage": "https://사용자아이디.github.io/프로젝트명",
+  "homepage": "https://yty0643.github.io/ugether/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
