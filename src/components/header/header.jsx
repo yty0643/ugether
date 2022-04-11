@@ -9,13 +9,14 @@ const Header = ({
   user_menu,
   setUser_menu,
   signOut,
-  sendMsg,
+  kakaoMsg,
   search,
+  goHome,
 }) => {
   const keywordRef = useRef();
   return (
     <header className={styles.header}>
-      <button className={styles.logo}>
+      <button className={styles.logo} onClick={goHome}>
         <FontAwesomeIcon icon="fa-solid fa-video" />
       </button>
       <div className={styles.search}>

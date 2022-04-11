@@ -1,13 +1,14 @@
 .main{
-    background-color: rgb(41, 41, 41);
+    background-color: rgb(40, 40, 40);
     /* max-width: 100%; */
     /* width:100%; */
     height: 100%; 
 }
 
 .content {
-    background-color: rgb(41, 41, 41);
+    background-color: rgb(40, 40, 40);
     display: flex;
+    
 }
 
 .detail {
@@ -15,25 +16,26 @@
 }
 
 .list {
-    flex: 1 1 25%;
+    flex: 1 1 30%;
+    margin-right: 25%;
 }
 
-.chat {
-    flex: 0 1 25%;
+.communication{
+    position: fixed;
+    top: 3rem;
+    left: 75%;
+    width: 25%;
+    height: calc(100vh - 3rem);
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (max-width: 48rem) {
     .content {
         flex-direction: column;
     }
-    
-    .chat{
-        position: fixed;
-        background-color: rgba(0, 0, 0, 0.718);
-        top: 80%;
-        left: 0;
-        bottom: 0;
-        width: 100%;
+    .communication{
+        position:static;
     }
 }
   

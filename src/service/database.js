@@ -36,6 +36,13 @@ class Database{
         return update(ref(db), updates);
     }
 
+    msgUpdate(email, value, date) {
+        const db = getDatabase();
+        const updates = {};
+        updates[`/users/${email}/msg/${date}`] = value;
+        return update(ref(db), updates);
+    }
+
     linkObserver(email, partner, setState) { //partner이메일로 바꿔야함.
         const db = getDatabase();
         const partnerRef = ref(db, `users/${partner}/partner`);
@@ -51,6 +58,22 @@ class Database{
         onValue(partnerRef, (snapshot) => {
             const data = snapshot.val();
             setState(data);
+        });
+    }
+
+    msgObserver(email, partner, setUserMsg, setPartMsg) {
+        const db = getDatabase();
+        const userRef = ref(db, `users/${email}/msg`);
+        onValue(userRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log("H");
+            setUserMsg(data);
+        });
+        const partnerRef = ref(db, `users/${partner}/msg`);
+        onValue(partnerRef, (snapshot) => {
+            const data = snapshot.val();
+            console.log("HH");
+            setPartMsg(data);
         });
     }
 }

@@ -5,6 +5,7 @@ import Header from "../header/header";
 import Link from "../link/link";
 import Video from "../video/video";
 import VideoList from "../video_list/video_list";
+import VideoStorage from "../video_storage/video_stroage";
 import styles from "./main.module.css";
 
 const Main = ({ kakaoService, dbService, youtube }) => {
@@ -18,6 +19,8 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState();
   const [user_menu, setUser_menu] = useState(false);
+  const [userMsg, setUserMsg] = useState();
+  const [partMsg, setPartMsg] = useState();
   const navigate = useNavigate();
 
   const signOut = () => {
@@ -26,7 +29,16 @@ const Main = ({ kakaoService, dbService, youtube }) => {
     setToken();
   };
 
-  const sendMsg = () => {
+  const goHome = () => {
+    navigate("/");
+  };
+
+  const sendMsg = (msg) => {
+    if (!msg) return;
+    dbService.msgUpdate(user.email, msg, new Date());
+  };
+
+  const kakaoMsg = () => {
     window.Kakao.Link.sendDefault({
       objectType: "text",
       text: `${user.nickname}님으로 부터 ugether 연결 요청을 받았습니다.`,
@@ -115,7 +127,15 @@ const Main = ({ kakaoService, dbService, youtube }) => {
     dbService.partnerObserver(pEmail, setPartner);
   }, [pEmail]);
 
-  useEffect(() => {}, [videos]);
+  useEffect(() => {
+    if (!isLink) return;
+    dbService.msgObserver(user.email, partner, setUserMsg, setPartMsg);
+  }, [isLink]);
+
+  useEffect(() => {
+    if (!userMsg && !partMsg) return;
+    //이런식으로 하면 안될듯 따로 DB만들어서 한곳에서 작성해야 간단하겠다
+  }, [userMsg, partMsg]);
 
   return (
     <div className={styles.main}>
@@ -125,8 +145,9 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         user_menu={user_menu}
         setUser_menu={setUser_menu}
         signOut={signOut}
-        sendMsg={sendMsg}
+        kakaoMsg={kakaoMsg}
         search={search}
+        goHome={goHome}
       />
       <section className={styles.content}>
         {selectedVideo && (
@@ -141,8 +162,9 @@ const Main = ({ kakaoService, dbService, youtube }) => {
             display={selectedVideo ? "list" : "grid"}
           />
         </div>
-        <div className={styles.chat}>
-          <Chat />
+        <div className={styles.communication}>
+          <VideoStorage />
+          <Chat userMsg={userMsg} partMsg={partMsg} sendMsg={sendMsg} />
         </div>
       </section>
       {isLink == false && <Link user={user} userLink={userLink} />}
