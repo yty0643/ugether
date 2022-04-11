@@ -22,7 +22,6 @@
 .search{
     display: flex;
     align-items: center;
-    font-size: 1.4rem;
     width: 40%;
 }
 .searchInput{
@@ -32,6 +31,10 @@
     color: rgb(238, 238, 238);
     background-color: rgb(14, 14, 14);
     outline: 1px solid rgb(52, 52, 52);
+}
+.searchBtn{
+    background-color: transparent;
+    font-size: 1.4rem;
 }
 
 .btns{

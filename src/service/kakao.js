@@ -43,9 +43,9 @@ class Kakao{
             data: {
                 property_keys: ["kakao_account.profile", "kakao_account.email"],
             },
-            fail: function (error) {
-                console.log(error);
-            },
+            // fail: function (error) {
+            //     throw new Error("1",error);
+            // },
         })
             .then(res => ({
                 "email": res.kakao_account.email.split(".")[0],

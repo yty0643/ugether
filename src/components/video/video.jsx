@@ -1,18 +1,22 @@
 import React from "react";
+import styles from "./video.module.css";
 
-const Video = (props) => {
+const Video = ({ video }) => {
   return (
-    // <iframe
-    //   width="560"
-    //   height="315"
-    //   src="https://www.youtube.com/embed/4wWf6biDbSQ"
-    //   title="YouTube video player"
-    //   frameborder="0"
-    //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    //   allowfullscreen
-    // ></iframe>
-    <div>video</div>
+    <section className={styles.detail}>
+      <iframe
+        className={styles.video}
+        type="text/html"
+        width="100%"
+        height="500px"
+        src={`https://www.youtube.com/embed/${video.id}`}
+        frameBorder="0"
+        allowFullScreen
+      ></iframe>
+      <h2>{video.snippet.title}</h2>
+      <h2>{video.snippet.channelTitle}</h2>
+      <pre className={styles.description}>{video.snippet.description}</pre>
+    </section>
   );
 };
-
 export default Video;

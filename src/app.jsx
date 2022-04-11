@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //필요한 �
 import Test from "./test";
 library.add(faUser, faVideo, faGithub, faMagnifyingGlass);
 
-const App = ({ kakaoService, dbService }) => {
+const App = ({ kakaoService, dbService, youtube }) => {
   return (
     <div className={styles.app}>
       {/* basename="/ugether" */}
@@ -28,7 +28,13 @@ const App = ({ kakaoService, dbService }) => {
           />
           <Route
             path="/main"
-            element={<Main kakaoService={kakaoService} dbService={dbService} />}
+            element={
+              <Main
+                kakaoService={kakaoService}
+                dbService={dbService}
+                youtube={youtube}
+              />
+            }
           />
           <Route path="/test" element={<Test />} />
         </Routes>

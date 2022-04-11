@@ -1,0 +1,52 @@
+ .container{
+    max-width: 15rem;
+    margin: 0 20px 20px 0;
+}
+
+.container.grid{
+    width: 45%;
+}
+.container.list{
+    width: 90%;
+}
+
+.thumbnail{
+    width: 100%;
+}
+
+.metadata{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.title{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    color: rgb(233, 233, 233);
+}
+
+.channel{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    color: rgb(138, 138, 138);
+}
+
+
+@media screen and (max-width: 48rem) {
+    .container{
+        max-width: none;
+    }
+    .video{
+        display: flex;
+    }
+    .title{
+        white-space:pre-wrap;
+        color: rgb(233, 233, 233);
+    }
+}
+  

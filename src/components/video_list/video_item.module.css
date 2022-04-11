@@ -1,0 +1,17 @@
+.videos{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 20px 0 0 20px;
+}
+
+@media screen and (max-width: 48rem) {
+    .videos{
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
+}
+  

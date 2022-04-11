@@ -1,17 +1,33 @@
-import React from "react";
+import React, { useRef } from "react";
 import UserMenu from "../user_menu/user_menu";
 import styles from "./header.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Header = ({ user, partner, user_menu, setUser_menu, signOut }) => {
+const Header = ({
+  user,
+  partner,
+  user_menu,
+  setUser_menu,
+  signOut,
+  sendMsg,
+  search,
+}) => {
+  const keywordRef = useRef();
   return (
     <header className={styles.header}>
-      <div className={styles.logo}>
+      <button className={styles.logo}>
         <FontAwesomeIcon icon="fa-solid fa-video" />
-      </div>
+      </button>
       <div className={styles.search}>
-        <input className={styles.searchInput} type="text" />
-        <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
+        <input className={styles.searchInput} ref={keywordRef} type="text" />
+        <button
+          className={styles.searchBtn}
+          onClick={() => {
+            search(keywordRef.current.value);
+          }}
+        >
+          <FontAwesomeIcon icon="fa-solid fa-magnifying-glass" />
+        </button>
       </div>
       <div className={styles.btns}>
         {partner && (

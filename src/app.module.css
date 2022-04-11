@@ -3,4 +3,5 @@
 .app{
     font-family: 'Nanum Gothic', sans-serif;
     height: 100vh;
+    width: calc(100vw - (100vw - 100%));
 }

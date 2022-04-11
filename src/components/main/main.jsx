@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Chat from "../chat/chat";
 import Header from "../header/header";
 import Link from "../link/link";
+import Video from "../video/video";
+import VideoList from "../video_list/video_list";
 import styles from "./main.module.css";
 
-const Main = ({ kakaoService, dbService }) => {
+const Main = ({ kakaoService, dbService, youtube }) => {
   const [token, setToken] = useState(
     JSON.parse(window.localStorage.getItem("token"))
   );
@@ -12,6 +15,8 @@ const Main = ({ kakaoService, dbService }) => {
   const [pEmail, setPEmail] = useState();
   const [partner, setPartner] = useState();
   const [isLink, setIsLink] = useState();
+  const [videos, setVideos] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState();
   const [user_menu, setUser_menu] = useState(false);
   const navigate = useNavigate();
 
@@ -24,7 +29,7 @@ const Main = ({ kakaoService, dbService }) => {
   const sendMsg = () => {
     window.Kakao.Link.sendDefault({
       objectType: "text",
-      text: `${user.nickname}님으로 부터 ugether 사용자 연결 요청을 받았습니다.`,
+      text: `${user.nickname}님으로 부터 ugether 연결 요청을 받았습니다.`,
       link: {
         mobileWebUrl: "https://developers.kakao.com/",
         webUrl: "https://developers.kakao.com",
@@ -56,10 +61,24 @@ const Main = ({ kakaoService, dbService }) => {
       .catch((error) => alert("Wrong code!"));
   };
 
+  const search = (keyword) => {
+    if (!keyword) return;
+    youtube.search(keyword).then((res) => setVideos(res));
+  };
+
+  const selectVideo = (video) => {
+    setSelectedVideo(video);
+  };
+
   useEffect(() => {
     kakaoService //
       .getUser()
-      .then((res) => setUser(res));
+      .then((res) => setUser(res))
+      .catch((error) => {
+        console.log(error);
+        window.localStorage.removeItem("token");
+        setToken();
+      });
   }, []);
 
   useEffect(() => {
@@ -81,6 +100,7 @@ const Main = ({ kakaoService, dbService }) => {
             dbService.update(user.email, "isOnline", true);
           });
       });
+
     return () => {
       dbService.update(user.email, "isOnline", false);
     };
@@ -95,6 +115,8 @@ const Main = ({ kakaoService, dbService }) => {
     dbService.partnerObserver(pEmail, setPartner);
   }, [pEmail]);
 
+  useEffect(() => {}, [videos]);
+
   return (
     <div className={styles.main}>
       <Header
@@ -103,7 +125,26 @@ const Main = ({ kakaoService, dbService }) => {
         user_menu={user_menu}
         setUser_menu={setUser_menu}
         signOut={signOut}
+        sendMsg={sendMsg}
+        search={search}
       />
+      <section className={styles.content}>
+        {selectedVideo && (
+          <div className={styles.detail}>
+            <Video video={selectedVideo} />
+          </div>
+        )}
+        <div className={styles.list}>
+          <VideoList
+            videos={videos}
+            onVideoClick={selectVideo}
+            display={selectedVideo ? "list" : "grid"}
+          />
+        </div>
+        <div className={styles.chat}>
+          <Chat />
+        </div>
+      </section>
       {isLink == false && <Link user={user} userLink={userLink} />}
     </div>
   );
