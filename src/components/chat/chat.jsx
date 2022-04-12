@@ -2,9 +2,7 @@ import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./chat.module.css";
 
-const Chat = ({ userMsg, partMsg, sendMsg }) => {
-  console.log(userMsg);
-  console.log(partMsg);
+const Chat = ({ sendMsg }) => {
   const inputRef = useRef();
   return (
     <section className={styles.chat}>

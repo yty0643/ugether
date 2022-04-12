@@ -1,4 +1,5 @@
 .userMenu{
+    z-index: 2;
     position: absolute;
     top:2rem;
     left: -3rem;

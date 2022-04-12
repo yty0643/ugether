@@ -19,8 +19,8 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState();
   const [user_menu, setUser_menu] = useState(false);
-  const [userMsg, setUserMsg] = useState();
-  const [partMsg, setPartMsg] = useState();
+  const [chatIndex, setChatIndex] = useState();
+  const [chatStorage, setChatStorage] = useState();
   const navigate = useNavigate();
 
   const signOut = () => {
@@ -35,7 +35,6 @@ const Main = ({ kakaoService, dbService, youtube }) => {
 
   const sendMsg = (msg) => {
     if (!msg) return;
-    dbService.msgUpdate(user.email, msg, new Date());
   };
 
   const kakaoMsg = () => {
@@ -59,15 +58,18 @@ const Main = ({ kakaoService, dbService, youtube }) => {
     });
   };
 
-  const userLink = (email) => {
-    if (email == user.email) return;
+  const userLink = (value) => {
+    if (value == user.email) return;
     dbService
-      .read(email)
+      .read(`users/${value}`)
       .then((res) => {
-        dbService.update(user.email, "partner", email);
-        dbService.linkObserver(user.email, email, () => {
-          dbService.update(user.email, "isLink", true);
-          setIsLink(true);
+        dbService.update(`/users/${user.email}/partner`, value);
+        setPEmail(value);
+        dbService.observer(`users/${value}/partner`, (data) => {
+          if (user.email == data) {
+            dbService.update(`/users/${user.email}/isLink`, true);
+            setIsLink(true);
+          }
         });
       })
       .catch((error) => alert("Wrong code!"));
@@ -96,11 +98,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   useEffect(() => {
     if (!user) return;
     dbService //
-      .read(user.email)
+      .read(`users/${user.email}`)
       .then((res) => {
         setIsLink(res.isLink);
         setPEmail(res.partner);
-        dbService.update(user.email, "isOnline", true);
+        setChatIndex(res.chatIndex);
+        dbService.update(`/users/${user.email}/isOnline`, true);
       })
       .catch((error) => {
         console.log(error);
@@ -109,12 +112,13 @@ const Main = ({ kakaoService, dbService, youtube }) => {
           .then(() => {
             setIsLink(false);
             setPEmail("");
-            dbService.update(user.email, "isOnline", true);
+            setChatIndex(null);
+            dbService.update(`/users/${user.email}/isOnline`, true);
           });
       });
 
     return () => {
-      dbService.update(user.email, "isOnline", false);
+      dbService.update(`/users/${user.email}/isOnline`, false);
     };
   }, [user]);
 
@@ -124,18 +128,33 @@ const Main = ({ kakaoService, dbService, youtube }) => {
 
   useEffect(() => {
     if (!pEmail) return;
-    dbService.partnerObserver(pEmail, setPartner);
+    dbService.observer(`users/${pEmail}`, (data) => {
+      setPartner(data);
+    });
   }, [pEmail]);
 
   useEffect(() => {
     if (!isLink) return;
-    dbService.msgObserver(user.email, partner, setUserMsg, setPartMsg);
+    if (!chatIndex) {
+      dbService //
+        .read(`chats`)
+        .then((res) => {
+          setChatIndex(res.length);
+          dbService.update(`/chats/${res.length}`, "");
+          dbService.update(`/users/${user.email}/chatIndex`, res.length);
+        })
+        .catch((error) => {
+          setChatIndex(0);
+        });
+    }
   }, [isLink]);
 
   useEffect(() => {
-    if (!userMsg && !partMsg) return;
-    //이런식으로 하면 안될듯 따로 DB만들어서 한곳에서 작성해야 간단하겠다
-  }, [userMsg, partMsg]);
+    if (!chatIndex) return;
+    dbService.observer(`chats/${chatIndex}`, (data) => {
+      setChatStorage(data);
+    });
+  }, [chatIndex]);
 
   return (
     <div className={styles.main}>
@@ -164,7 +183,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         </div>
         <div className={styles.communication}>
           <VideoStorage />
-          <Chat userMsg={userMsg} partMsg={partMsg} sendMsg={sendMsg} />
+          <Chat sendMsg={sendMsg} />
         </div>
       </section>
       {isLink == false && <Link user={user} userLink={userLink} />}
