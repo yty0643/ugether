@@ -19,8 +19,9 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState();
   const [user_menu, setUser_menu] = useState(false);
-  const [chatIndex, setChatIndex] = useState();
+  const [storageIndex, setStorageIndex] = useState();
   const [chatStorage, setChatStorage] = useState();
+  const [videoStorage, setVideoStorage] = useState();
   const navigate = useNavigate();
 
   const signOut = () => {
@@ -36,9 +37,18 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const sendMsg = (msg) => {
     if (!msg) return;
     const date = new Date();
-    dbService.update(`/chats/${chatIndex}/${date}`, {
+    dbService.update(`/storage/${storageIndex}/chat/${date}`, {
       user: user.email,
       msg,
+      date,
+    });
+  };
+
+  const sharingVideo = (url) => {
+    if (!url) return;
+    const date = new Date();
+    dbService.update(`/storage/${storageIndex}/video/${date}`, {
+      url,
       date,
     });
   };
@@ -108,7 +118,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
       .then((res) => {
         setIsLink(res.isLink);
         setPEmail(res.partner);
-        setChatIndex(res.chatIndex);
+        setStorageIndex(res.storageIndex);
         dbService.update(`/users/${user.email}/isOnline`, true);
       })
       .catch((error) => {
@@ -122,28 +132,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
             partner: "",
             isOnline: false,
             isLink: false,
-            chatIndex: false,
-          })
-          .then(() => {
-            dbService //
-              .read(`chats`)
-              .then((res) => {
-                setChatIndex(res.length + 1);
-                dbService.update(`/chats/${res.length + 1}`, "");
-                dbService.update(
-                  `/users/${user.email}/chatIndex`,
-                  res.length + 1
-                );
-              })
-              .catch((error) => {
-                setChatIndex(1);
-                dbService.update(`/chats/1`, "");
-                dbService.update(`/users/${user.email}/chatIndex`, 1);
-              });
+            storageIndex: false,
           })
           .then(() => {
             setIsLink(false);
             setPEmail("");
+            setStorageIndex(-1);
             dbService.update(`/users/${user.email}/isOnline`, true);
           });
       });
@@ -169,11 +163,31 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   }, [isLink]);
 
   useEffect(() => {
-    if (!chatIndex) return;
-    dbService.observer(`/chats/${chatIndex}`, (data) => {
-      setChatStorage([...Object.values(data)]);
-    });
-  }, [chatIndex]);
+    if (!storageIndex) return;
+    if (storageIndex == -1) {
+      dbService //
+        .read(`storage`)
+        .then((res) => {
+          setStorageIndex(res.length + 1);
+          dbService.update(`/storage/${res.length + 1}/chat`, "");
+          dbService.update(`/storage/${res.length + 1}/video`, "");
+          dbService.update(`/users/${user.email}/storageIndex`, res.length + 1);
+        })
+        .catch((error) => {
+          setStorageIndex(1);
+          dbService.update(`/storage/1/chat`, "");
+          dbService.update(`/storage/1/video`, "");
+          dbService.update(`/users/${user.email}/storageIndex`, 1);
+        });
+    } else {
+      dbService.observer(`/storage/${storageIndex}/chat`, (data) => {
+        setChatStorage([...Object.values(data)]);
+      });
+      dbService.observer(`/storage/${storageIndex}/video`, (data) => {
+        setVideoStorage([...Object.values(data)]);
+      });
+    }
+  }, [storageIndex]);
 
   return (
     <div className={styles.main}>
@@ -200,9 +214,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
             display={selectedVideo ? "list" : "grid"}
           />
         </div>
-        {user && (
+        {storageIndex > 0 && (
           <div className={styles.communication}>
-            <VideoStorage />
+            <VideoStorage
+              videoStorage={videoStorage}
+              sharingVideo={sharingVideo}
+            />
             <Chat user={user} chatStorage={chatStorage} sendMsg={sendMsg} />
           </div>
         )}

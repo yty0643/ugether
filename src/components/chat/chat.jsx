@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./chat.module.css";
 
 const Chat = ({ user, chatStorage, sendMsg }) => {
-  console.log(chatStorage);
   const inputRef = useRef();
   return (
     <section className={styles.chat}>
