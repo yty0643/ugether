@@ -50,7 +50,7 @@ class Kakao{
             .then(res => ({
                 "email": res.kakao_account.email.split(".")[0],
                 "name": res.kakao_account.profile.nickname,
-                "imgae": res.kakao_account.profile.profile_image_url,
+                "image": res.kakao_account.profile.profile_image_url,
                 "img": res.kakao_account.profile.thumbnail_image_url,
             }))
         return await res;

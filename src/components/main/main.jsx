@@ -35,6 +35,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
 
   const sendMsg = (msg) => {
     if (!msg) return;
+    const date = new Date();
+    dbService.update(`/chats/${chatIndex}/${date}`, {
+      user: user.email,
+      msg,
+      date,
+    });
   };
 
   const kakaoMsg = () => {
@@ -61,11 +67,11 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const userLink = (value) => {
     if (value == user.email) return;
     dbService
-      .read(`users/${value}`)
+      .read(`/users/${value}`)
       .then((res) => {
         dbService.update(`/users/${user.email}/partner`, value);
         setPEmail(value);
-        dbService.observer(`users/${value}/partner`, (data) => {
+        dbService.observer(`/users/${value}/partner`, (data) => {
           if (user.email == data) {
             dbService.update(`/users/${user.email}/isLink`, true);
             setIsLink(true);
@@ -98,7 +104,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   useEffect(() => {
     if (!user) return;
     dbService //
-      .read(`users/${user.email}`)
+      .read(`/users/${user.email}`)
       .then((res) => {
         setIsLink(res.isLink);
         setPEmail(res.partner);
@@ -108,11 +114,36 @@ const Main = ({ kakaoService, dbService, youtube }) => {
       .catch((error) => {
         console.log(error);
         dbService //
-          .write(...Object.values(user))
+          .update(`/users/${user.email}`, {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            img: user.img,
+            partner: "",
+            isOnline: false,
+            isLink: false,
+            chatIndex: false,
+          })
+          .then(() => {
+            dbService //
+              .read(`chats`)
+              .then((res) => {
+                setChatIndex(res.length + 1);
+                dbService.update(`/chats/${res.length + 1}`, "");
+                dbService.update(
+                  `/users/${user.email}/chatIndex`,
+                  res.length + 1
+                );
+              })
+              .catch((error) => {
+                setChatIndex(1);
+                dbService.update(`/chats/1`, "");
+                dbService.update(`/users/${user.email}/chatIndex`, 1);
+              });
+          })
           .then(() => {
             setIsLink(false);
             setPEmail("");
-            setChatIndex(null);
             dbService.update(`/users/${user.email}/isOnline`, true);
           });
       });
@@ -128,31 +159,19 @@ const Main = ({ kakaoService, dbService, youtube }) => {
 
   useEffect(() => {
     if (!pEmail) return;
-    dbService.observer(`users/${pEmail}`, (data) => {
+    dbService.observer(`/users/${pEmail}`, (data) => {
       setPartner(data);
     });
   }, [pEmail]);
 
   useEffect(() => {
     if (!isLink) return;
-    if (!chatIndex) {
-      dbService //
-        .read(`chats`)
-        .then((res) => {
-          setChatIndex(res.length);
-          dbService.update(`/chats/${res.length}`, "");
-          dbService.update(`/users/${user.email}/chatIndex`, res.length);
-        })
-        .catch((error) => {
-          setChatIndex(0);
-        });
-    }
   }, [isLink]);
 
   useEffect(() => {
     if (!chatIndex) return;
-    dbService.observer(`chats/${chatIndex}`, (data) => {
-      setChatStorage(data);
+    dbService.observer(`/chats/${chatIndex}`, (data) => {
+      setChatStorage([...Object.values(data)]);
     });
   }, [chatIndex]);
 
@@ -181,10 +200,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
             display={selectedVideo ? "list" : "grid"}
           />
         </div>
-        <div className={styles.communication}>
-          <VideoStorage />
-          <Chat sendMsg={sendMsg} />
-        </div>
+        {user && (
+          <div className={styles.communication}>
+            <VideoStorage />
+            <Chat user={user} chatStorage={chatStorage} sendMsg={sendMsg} />
+          </div>
+        )}
       </section>
       {isLink == false && <Link user={user} userLink={userLink} />}
     </div>

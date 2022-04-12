@@ -2,17 +2,23 @@ import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./chat.module.css";
 
-const Chat = ({ sendMsg }) => {
+const Chat = ({ user, chatStorage, sendMsg }) => {
+  console.log(chatStorage);
   const inputRef = useRef();
   return (
     <section className={styles.chat}>
       <div className={styles.content}>
-        <p className={styles.you}>aaaaaaaaaa</p>
-        <p className={styles.me}>bbbbbbbbbb</p>
-        <p className={styles.you}>aaaaaaaaaa</p>
-        <p className={styles.me}>bbbbbbbbbb</p>
-        <p className={styles.you}>aaaaaaaaaa</p>
-        <p className={styles.me}>bbbbbbbbbb</p>
+        {chatStorage &&
+          chatStorage.map((item, index) => {
+            return (
+              <p
+                className={user.email == item.user ? styles.me : styles.you}
+                key={index}
+              >
+                {item.msg}
+              </p>
+            );
+          })}
       </div>
       <div className={styles.submit}>
         <input className={styles.input} type="text" ref={inputRef} />
