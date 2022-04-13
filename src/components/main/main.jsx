@@ -44,13 +44,17 @@ const Main = ({ kakaoService, dbService, youtube }) => {
     });
   };
 
-  const sharingVideo = (url) => {
+  const addURL = (url) => {
     if (!url) return;
     const date = new Date();
     dbService.update(`/storage/${storageIndex}/video/${date}`, {
       url,
       date,
     });
+  };
+
+  const delURL = (date) => {
+    console.log(date);
   };
 
   const kakaoMsg = () => {
@@ -109,6 +113,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         window.localStorage.removeItem("token");
         setToken();
       });
+    youtube.mostPopular().then((res) => setVideos(res));
   }, []);
 
   useEffect(() => {
@@ -214,11 +219,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
             display={selectedVideo ? "list" : "grid"}
           />
         </div>
-        {storageIndex > 0 && (
+        {user && (
           <div className={styles.communication}>
             <VideoStorage
               videoStorage={videoStorage}
-              sharingVideo={sharingVideo}
+              addURL={addURL}
+              delURL={delURL}
             />
             <Chat user={user} chatStorage={chatStorage} sendMsg={sendMsg} />
           </div>

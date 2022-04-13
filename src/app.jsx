@@ -9,11 +9,20 @@ import {
   faVideo,
   faMagnifyingGlass,
   faArrowUp,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faYoutube } from "@fortawesome/free-brands-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //필요한 컴포넌트에서 import
 import Test from "./test";
-library.add(faUser, faVideo, faGithub, faMagnifyingGlass, faArrowUp);
+library.add(
+  faUser,
+  faVideo,
+  faGithub,
+  faMagnifyingGlass,
+  faYoutube,
+  faArrowUp,
+  faComment
+);
 
 const App = ({ kakaoService, dbService, youtube }) => {
   return (

@@ -16,9 +16,12 @@ const Header = ({
   const keywordRef = useRef();
   return (
     <header className={styles.header}>
-      <button className={styles.logo} onClick={goHome}>
-        <FontAwesomeIcon icon="fa-solid fa-video" />
-      </button>
+      <div className={styles.logo}>
+        <button className={styles.logoBtn} onClick={goHome}>
+          <FontAwesomeIcon icon="fa-solid fa-video" />
+        </button>
+        <p className={styles.title}>유게더</p>
+      </div>
       <div className={styles.search}>
         <input className={styles.searchInput} ref={keywordRef} type="text" />
         <button
