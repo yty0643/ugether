@@ -10,6 +10,10 @@ import {
   faMagnifyingGlass,
   faArrowUp,
   faComment,
+  faXmark,
+  faArrowRightToBracket,
+  faLinkSlash,
+  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faYoutube } from "@fortawesome/free-brands-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //필요한 컴포넌트에서 import
@@ -21,7 +25,11 @@ library.add(
   faMagnifyingGlass,
   faYoutube,
   faArrowUp,
-  faComment
+  faComment,
+  faXmark,
+  faArrowRightToBracket,
+  faLinkSlash,
+  faEnvelope
 );
 
 const App = ({ kakaoService, dbService, youtube }) => {

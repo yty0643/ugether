@@ -1,0 +1,40 @@
+.search{
+    position: relative;
+    display: flex;
+    border: 1px solid rgb(80, 80, 80);
+    border-right: none;
+    border-radius: 3px;
+    background-color: rgb(20, 20, 20);
+    width: 40%;
+    height: 60%;
+}
+.input{
+    flex: 1 1 auto;
+    margin-right: 2px;
+    padding: 0 1.5rem 0 0.5rem;
+    font-size: 1rem;
+    background-color: transparent;
+    color: white;
+}
+.xBtn{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top:0;
+    right: 3.5rem;
+    height:100%;
+    font-size: 1.3rem;
+    color:white;
+}
+.xBtn.active{
+    display: flex;
+}
+.searchBtn{
+    width: 3rem;
+    height: 100%;
+    font-size: 1rem;
+    border-radius: 0 3px 3px 0;
+    background-color: rgb(80, 80, 80);
+    color: white;
+}

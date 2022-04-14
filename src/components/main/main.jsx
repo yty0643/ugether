@@ -19,9 +19,11 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState();
   const [user_menu, setUser_menu] = useState(false);
+  const [partner_menu, setPartner_menu] = useState();
   const [storageIndex, setStorageIndex] = useState();
   const [chatStorage, setChatStorage] = useState();
   const [videoStorage, setVideoStorage] = useState();
+  const [xActive, setXActive] = useState();
   const navigate = useNavigate();
 
   const signOut = () => {
@@ -98,6 +100,11 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   const search = (keyword) => {
     if (!keyword) return;
     youtube.search(keyword).then((res) => setVideos(res));
+  };
+
+  const searchActiveHandle = (value) => {
+    if (value) setXActive(true);
+    else setXActive(false);
   };
 
   const selectVideo = (video) => {
@@ -200,10 +207,14 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         user={user}
         partner={partner}
         user_menu={user_menu}
+        partner_menu={partner_menu}
+        xActive={xActive}
         setUser_menu={setUser_menu}
+        setPartner_menu={setPartner_menu}
         signOut={signOut}
         kakaoMsg={kakaoMsg}
         search={search}
+        searchActiveHandle={searchActiveHandle}
         goHome={goHome}
       />
       <section className={styles.content}>
@@ -230,6 +241,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
           </div>
         )}
       </section>
+
       {isLink == false && <Link user={user} userLink={userLink} />}
     </div>
   );

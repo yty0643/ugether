@@ -1,4 +1,4 @@
-.userMenu{
+.partnerMenu{
     z-index: 2;
     position: absolute;
     top: calc(3.5rem - 1px);
@@ -10,6 +10,7 @@
     padding: 0.5rem 0;
     width: 20rem;
     border: 1px solid rgb(80, 80, 80);
+    
     border-top: none;
     border-radius: 0 0 3px 3px;
     background-color: rgba(40, 40, 40)
@@ -43,18 +44,12 @@
     margin-bottom: 0.5rem;
 }
 .btn:hover{
-    background-color: rgb(79, 79, 79);
+    background-color: rgb(80, 80, 80);
 }
-
-.icon,
-.unlinkIcon{
+.icon{
     color: white;
     font-size: 1.2rem;
     margin-right: 1rem;
-}
-
-.unlinkIcon{
-    font-size: 0.95rem
 }
 
 .horizontal{

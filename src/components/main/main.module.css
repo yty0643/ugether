@@ -18,13 +18,14 @@
 
 .communication{
     position: fixed;
-    top: 3rem;
+    top: 3.5rem;
     left: 75%;
     width: 25%;
     height: calc(100vh - 3rem);
     display: flex;
     flex-direction: column;
 }
+
 
 @media screen and (max-width: 48rem) {
     .content {

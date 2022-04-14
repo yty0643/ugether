@@ -127,7 +127,7 @@ const Login = ({ kakaoService, dbService }) => {
           Together
         </p>
         <p className={`${styles.description2} ${active3 && styles.active2}`}>
-          YouTube
+          Ugether
         </p>
         <p className={`${styles.description2} ${active4 && styles.active2}`}>
           Sign-in with kakao

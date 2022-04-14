@@ -42,7 +42,7 @@
 
 .youtubeBtn{
     font-size: 2.5rem;
-    color:rgb(246, 0, 0);
+    color:rgb(245, 0, 0);
     margin-bottom: 0.5rem;
     background-color: white;
     border-radius: 15%;
@@ -140,7 +140,7 @@
     border-radius: 3px;
     font-size: 13px;
     background-color: rgb(196, 208, 218);
-    color:rgb(255, 255, 255);
+    color:white;
     opacity: 0;
 }
 .copy.visible{
@@ -149,5 +149,5 @@
 
 .footer{
     font-size: 10px;
-    color:rgb(211, 211, 211)
+    color:rgb(200, 200, 200)
 }
