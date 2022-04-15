@@ -7,7 +7,8 @@ const Test = (props) => {
     image: "png",
     img: "jpg",
   };
-
+  const test = [];
+  console.log(test.length);
   useEffect(() => {
     console.log(...Object.entries(user));
   });

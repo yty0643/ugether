@@ -48,21 +48,33 @@ const Main = ({ kakaoService, dbService, youtube }) => {
 
   const addURL = (url) => {
     if (!url) return;
+    const subURL = url.split("be/")[1];
+    if (!subURL) return;
     const date = new Date();
-    dbService.update(`/storage/${storageIndex}/video/${date}`, {
-      url,
-      date,
-    });
+    youtube //
+      .urlSearch(subURL)
+      .then((res) => {
+        dbService.update(`/storage/${storageIndex}/video/${date}`, {
+          video: res,
+          date: `${date}`,
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   const delURL = (date) => {
     console.log(date);
+    dbService.update(`/storage/${storageIndex}/video/${date}`, "");
+  };
+
+  const URLClick = (data) => {
+    setSelectedVideo(data);
   };
 
   const kakaoMsg = () => {
     window.Kakao.Link.sendDefault({
       objectType: "text",
-      text: `${user.nickname}님으로 부터 ugether 연결 요청을 받았습니다.`,
+      text: `${user.name}님으로 부터 ugether 연결 요청을 받았습니다.`,
       link: {
         mobileWebUrl: "https://developers.kakao.com/",
         webUrl: "https://developers.kakao.com",
@@ -176,6 +188,14 @@ const Main = ({ kakaoService, dbService, youtube }) => {
 
   useEffect(() => {
     if (!storageIndex) return;
+    if (!partner) return;
+    if (storageIndex > partner.storageIndex) {
+      setStorageIndex(partner.storageIndex);
+      dbService.update(
+        `/users/${user.email}/storageIndex`,
+        partner.storageIndex
+      );
+    }
     if (storageIndex == -1) {
       dbService //
         .read(`storage`)
@@ -192,14 +212,30 @@ const Main = ({ kakaoService, dbService, youtube }) => {
           dbService.update(`/users/${user.email}/storageIndex`, 1);
         });
     } else {
-      dbService.observer(`/storage/${storageIndex}/chat`, (data) => {
-        setChatStorage([...Object.values(data)]);
-      });
-      dbService.observer(`/storage/${storageIndex}/video`, (data) => {
-        setVideoStorage([...Object.values(data)]);
-      });
+      dbService
+        .read(`storage/${storageIndex}`)
+        .then(() => {
+          dbService.observer(`/storage/${storageIndex}/chat`, (data) => {
+            setChatStorage([...Object.values(data)]);
+          });
+          dbService.observer(`/storage/${storageIndex}/video`, (data) => {
+            setVideoStorage([...Object.values(data)]);
+          });
+        })
+        .catch((error) => {
+          dbService.update(`/storage/${storageIndex}/chat`, "");
+          dbService.update(`/storage/${storageIndex}/video`, "");
+        })
+        .then(() => {
+          dbService.observer(`/storage/${storageIndex}/chat`, (data) => {
+            setChatStorage([...Object.values(data)]);
+          });
+          dbService.observer(`/storage/${storageIndex}/video`, (data) => {
+            setVideoStorage([...Object.values(data)]);
+          });
+        });
     }
-  }, [storageIndex]);
+  }, [storageIndex, partner]);
 
   return (
     <div className={styles.main}>
@@ -236,8 +272,13 @@ const Main = ({ kakaoService, dbService, youtube }) => {
               videoStorage={videoStorage}
               addURL={addURL}
               delURL={delURL}
+              URLClick={URLClick}
             />
-            <Chat user={user} chatStorage={chatStorage} sendMsg={sendMsg} />
+            <Chat //
+              user={user}
+              chatStorage={chatStorage}
+              sendMsg={sendMsg}
+            />
           </div>
         )}
       </section>

@@ -13,8 +13,8 @@ const Video = ({ video }) => {
         frameBorder="0"
         allowFullScreen
       ></iframe>
-      <h2>{video.snippet.title}</h2>
-      <h2>{video.snippet.channelTitle}</h2>
+      <h2 className={styles.title}>{video.snippet.title}</h2>
+      <h2 className={styles.channelTitle}>{video.snippet.channelTitle}</h2>
       <pre className={styles.description}>{video.snippet.description}</pre>
     </section>
   );

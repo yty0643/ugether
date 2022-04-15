@@ -1,18 +1,21 @@
 .main{
+    height: 100vh;
     background-color: rgb(40, 40, 40);
 }
 
 .content {
-    background-color: rgb(40, 40, 40);
+    margin-top: 3.5rem;
+    background-color: rgb(30, 30, 30);
     display: flex;
 }
 
 .detail {
-    flex: 1 1 50%;
+    flex: 1 1 60%;
 }
 
 .list {
-    flex: 1 1 30%;
+    z-index: 0;
+    flex: 1 1 15%;
     margin-right: 25%;
 }
 
@@ -21,7 +24,7 @@
     top: 3.5rem;
     left: 75%;
     width: 25%;
-    height: calc(100vh - 3rem);
+    height: calc(100vh - 3.5rem - 2px);
     display: flex;
     flex-direction: column;
 }

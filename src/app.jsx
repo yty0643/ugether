@@ -14,6 +14,8 @@ import {
   faArrowRightToBracket,
   faLinkSlash,
   faEnvelope,
+  faPlus,
+  faMinus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faYoutube } from "@fortawesome/free-brands-svg-icons";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //필요한 컴포넌트에서 import
@@ -29,14 +31,16 @@ library.add(
   faXmark,
   faArrowRightToBracket,
   faLinkSlash,
-  faEnvelope
+  faEnvelope,
+  faPlus,
+  faMinus
 );
 
 const App = ({ kakaoService, dbService, youtube }) => {
   return (
     <div className={styles.app}>
       {/* basename="/ugether" */}
-      <BrowserRouter>
+      <BrowserRouter basename="/ugether">
         <Routes>
           <Route
             path="/"

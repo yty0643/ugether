@@ -11,7 +11,9 @@ const Chat = ({ user, chatStorage, sendMsg }) => {
           chatStorage.map((item, index) => {
             return (
               <p
-                className={user.email == item.user ? styles.me : styles.you}
+                className={`${styles.msg} ${
+                  user.email == item.user ? styles.me : styles.you
+                }`}
                 key={index}
               >
                 {item.msg}
@@ -20,11 +22,21 @@ const Chat = ({ user, chatStorage, sendMsg }) => {
           })}
       </div>
       <div className={styles.submit}>
-        <input className={styles.input} type="text" ref={inputRef} />
+        <textarea
+          className={styles.input}
+          ref={inputRef}
+          placeholder="메세지 입력"
+          onKeyUp={(event) => {
+            if (!(event.key == "Enter")) return;
+            sendMsg(inputRef.current.value);
+            inputRef.current.value = "";
+          }}
+        />
         <button
           className={styles.sendBtn}
           onClick={() => {
             sendMsg(inputRef.current.value);
+            inputRef.current.value = "";
           }}
         >
           <FontAwesomeIcon icon="fa-solid fa-arrow-up" />
