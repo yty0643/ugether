@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/ugether/static/css/main.3e8b1034.css",
-    "main.js": "/ugether/static/js/main.22f77b86.js",
+    "main.css": "/ugether/static/css/main.548dab6a.css",
+    "main.js": "/ugether/static/js/main.3ce10543.js",
     "index.html": "/ugether/index.html",
-    "main.3e8b1034.css.map": "/ugether/static/css/main.3e8b1034.css.map",
-    "main.22f77b86.js.map": "/ugether/static/js/main.22f77b86.js.map"
+    "main.548dab6a.css.map": "/ugether/static/css/main.548dab6a.css.map",
+    "main.3ce10543.js.map": "/ugether/static/js/main.3ce10543.js.map"
   },
   "entrypoints": [
-    "static/css/main.3e8b1034.css",
-    "static/js/main.22f77b86.js"
+    "static/css/main.548dab6a.css",
+    "static/js/main.3ce10543.js"
   ]
 }
