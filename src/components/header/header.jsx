@@ -16,6 +16,7 @@ const Header = ({
   setPartner_menu,
   signOut,
   kakaoMsg,
+  unlink,
   search,
   searchActiveHandle,
   goHome,
@@ -34,7 +35,7 @@ const Header = ({
         setUser_menu={setUser_menu}
         setPartner_menu={setPartner_menu}
       />
-      {user_menu && <UserMenu user={user} signOut={signOut} />}
+      {user_menu && <UserMenu user={user} signOut={signOut} unlink={unlink} />}
       {partner_menu && (
         <PartnerMenu user={user} partner={partner} kakaoMsg={kakaoMsg} />
       )}

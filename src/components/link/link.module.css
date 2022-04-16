@@ -1,11 +1,11 @@
 .link{
-    position: absolute;
+    position: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%;
-    background-color: rgba(121, 121, 121, 0.5);
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.732);
     top:0;
     left: 0;
 }
@@ -15,6 +15,62 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
+    border: 1px solid rgb(80,80,80);
+    border-radius: 5px;
     color: white;
     background-color: rgb(48, 48, 48);
+}
+
+.title{
+    margin-bottom: 0.5rem;
+    padding: 0.3rem;
+    font-size: 1.5rem;
+    color:rgb(255, 255, 255);
+    width: 100%;
+    background-color: rgb(29, 29, 29);
+}
+
+.code{
+    margin-bottom: 0.5rem;
+    width: 100%;
+    color: rgb(190, 190, 190);
+}
+
+.input{
+    width: 100%;
+    margin-bottom: 1px;
+    padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+    border: 1px solid rgb(80,80,80);
+    background-color: transparent;
+}
+
+.btns{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.linkBtn,
+.copyBtn{
+    width: 7rem;
+    color:white;
+    padding: 1rem;
+    border-radius: 0 0 0px 5px;
+    background-color: rgb(255, 165, 31);
+    transition: all ease-in 100ms;
+}
+.linkBtn{
+    border-right:1px solid rgb(80,80,80);
+}
+.copyBtn{
+    border-left:1px solid rgb(80,80,80);
+    border-radius: 0 0 5px 0px;
+}
+
+.linkBtn:hover,
+.copyBtn:hover{
+    border-radius: 5px;
+    transform: scale(1.05);
 }

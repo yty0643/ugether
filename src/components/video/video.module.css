@@ -1,7 +1,10 @@
 .detail {
-    padding: 0.2em;
+    margin: 1.5rem 0.5rem 0 3rem;
 }
-
+.box{
+    display: flex;
+    justify-content: space-between;
+}
 .title{
     color:white;
 }
@@ -12,4 +15,19 @@
 .description {
     white-space: pre-wrap;
     color:white;
+}
+.btn{
+    font-size: 1.5rem;
+    
+    flex: 0 0 10rem;
+    height: 10rem;
+    color:white;
+    border: 1px solid rgb(60,60,60);
+    border-radius: 5px;
+    background-color: rgb(255, 132, 0);
+    transition: all ease-in 100ms;
+}
+
+.btn:hover{
+    transform: scale(1.02);
 }

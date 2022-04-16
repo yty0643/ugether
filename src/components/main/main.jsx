@@ -63,7 +63,6 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   };
 
   const delURL = (date) => {
-    console.log(date);
     dbService.update(`/storage/${storageIndex}/video/${date}`, "");
   };
 
@@ -107,6 +106,14 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         });
       })
       .catch((error) => alert("Wrong code!"));
+    setStorageIndex(-1);
+  };
+
+  const unlink = () => {
+    setIsLink(false);
+    dbService.update(`users/${user.email}/isLink`, false);
+    setPartner();
+    setPEmail();
   };
 
   const search = (keyword) => {
@@ -187,9 +194,12 @@ const Main = ({ kakaoService, dbService, youtube }) => {
   }, [isLink]);
 
   useEffect(() => {
-    if (!storageIndex) return;
+    if (storageIndex === false) return;
     if (!partner) return;
-    if (storageIndex > partner.storageIndex) {
+    if (
+      !(partner.storageIndex === false) &&
+      storageIndex > partner.storageIndex
+    ) {
       setStorageIndex(partner.storageIndex);
       dbService.update(
         `/users/${user.email}/storageIndex`,
@@ -200,10 +210,10 @@ const Main = ({ kakaoService, dbService, youtube }) => {
       dbService //
         .read(`storage`)
         .then((res) => {
-          setStorageIndex(res.length + 1);
-          dbService.update(`/storage/${res.length + 1}/chat`, "");
-          dbService.update(`/storage/${res.length + 1}/video`, "");
-          dbService.update(`/users/${user.email}/storageIndex`, res.length + 1);
+          setStorageIndex(res.length);
+          dbService.update(`/storage/${res.length}/chat`, "");
+          dbService.update(`/storage/${res.length}/video`, "");
+          dbService.update(`/users/${user.email}/storageIndex`, res.length);
         })
         .catch((error) => {
           setStorageIndex(1);
@@ -215,6 +225,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
       dbService
         .read(`storage/${storageIndex}`)
         .then(() => {
+          dbService.update(`/users/${user.email}/storageIndex`, storageIndex);
           dbService.observer(`/storage/${storageIndex}/chat`, (data) => {
             setChatStorage([...Object.values(data)]);
           });
@@ -223,6 +234,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
           });
         })
         .catch((error) => {
+          dbService.update(`/users/${user.email}/storageIndex`, storageIndex);
           dbService.update(`/storage/${storageIndex}/chat`, "");
           dbService.update(`/storage/${storageIndex}/video`, "");
         })
@@ -249,6 +261,7 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         setPartner_menu={setPartner_menu}
         signOut={signOut}
         kakaoMsg={kakaoMsg}
+        unlink={unlink}
         search={search}
         searchActiveHandle={searchActiveHandle}
         goHome={goHome}
@@ -282,7 +295,6 @@ const Main = ({ kakaoService, dbService, youtube }) => {
           </div>
         )}
       </section>
-
       {isLink == false && <Link user={user} userLink={userLink} />}
     </div>
   );

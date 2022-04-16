@@ -6,16 +6,39 @@ const Link = ({ user, userLink }) => {
   return (
     <div className={styles.link}>
       <div className={styles.contents}>
-        <p>내 코드</p>
-        <p>{user.email}</p>
-        <input type="text" ref={emailRef} />
-        <button
-          onClick={() => {
-            userLink(emailRef.current.value);
+        <p className={styles.title}>Start with link</p>
+        <p className={styles.code}>my code: {user.email}</p>
+        <input
+          className={styles.input}
+          type="text"
+          ref={emailRef}
+          placeholder="친구 코드 입력"
+          onKeyUp={(e) => {
+            if (e.key == "Enter") {
+              userLink(emailRef.current.value);
+              emailRef.current.value = "";
+            }
           }}
-        >
-          link
-        </button>
+        />
+        <div className={styles.btns}>
+          <button
+            className={styles.linkBtn}
+            onClick={() => {
+              userLink(emailRef.current.value);
+              emailRef.current.value = "";
+            }}
+          >
+            Link !
+          </button>
+          <button
+            className={styles.copyBtn}
+            onClick={() => {
+              navigator.clipboard.writeText(user.email);
+            }}
+          >
+            Code Copy
+          </button>
+        </div>
       </div>
     </div>
   );

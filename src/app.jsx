@@ -40,7 +40,7 @@ const App = ({ kakaoService, dbService, youtube }) => {
   return (
     <div className={styles.app}>
       {/* basename="/ugether" */}
-      <BrowserRouter basename="/ugether">
+      <BrowserRouter>
         <Routes>
           <Route
             path="/"
