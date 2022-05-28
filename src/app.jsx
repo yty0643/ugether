@@ -58,7 +58,7 @@ const App = ({ kakaoService, dbService, youtube }) => {
               />
             }
           />
-          <Route path="/test" element={<Test />} />
+          <Route path="/test" element={<Test dbService={dbService} />} />
         </Routes>
       </BrowserRouter>
     </div>

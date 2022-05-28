@@ -153,7 +153,6 @@ const Main = ({ kakaoService, dbService, youtube }) => {
         dbService.update(`/users/${user.email}/isOnline`, true);
       })
       .catch((error) => {
-        console.log(error);
         dbService //
           .update(`/users/${user.email}`, {
             email: user.email,

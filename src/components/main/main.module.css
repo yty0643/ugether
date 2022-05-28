@@ -37,5 +37,8 @@
     .communication{
         position:static;
     }
+    .list{
+        margin:0;
+    }
 }
   

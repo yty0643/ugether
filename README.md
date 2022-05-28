@@ -1,3 +1,26 @@
+# Ugether
+
+Kakao API 및 React 개발 역량 강화를 위해 프로젝트를 계획했다.
+
+파트너를 등록해서 유투브를 시청하며 함께볼 리스트를 공유할 수 있고, 실시간 채팅을 할 수 있다.
+
+---
+
+# 실행 화면
+
+<img width="500" alt="1" src="https://user-images.githubusercontent.com/80657819/170807003-a5676c54-68bc-4e73-83a6-76469d7c7c21.PNG">
+
+<img width="500" alt="2" src="https://user-images.githubusercontent.com/80657819/170807007-ef69486f-4445-403d-bc91-d1c4454fc9b2.PNG">
+
+---
+
+# 문제점
+
+워낙 리액트 공부 초반에 개발했던 프로젝트라 유지보수하기 어렵게 설계되어있다.
+이번에 포트폴리오에 넣으려고 앱을 실행했는데 사이드이펙트가 너무 많았고 결국 포트폴리오에 넣지 않기로 결정했다.
+
+---
+
 # error 해결 과정
 
 KAKAO REST API로 SignIn 구현중 fetch를 통해 https://kauth.kakao.com/oauth/authorize를 비동기 통신 방식으로 호출했다.

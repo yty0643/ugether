@@ -1,12 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./chat.module.css";
 
 const Chat = ({ user, chatStorage, sendMsg }) => {
   const inputRef = useRef();
+  const scrollRef = useRef();
+
+  useEffect(() => {}, []);
+
   return (
     <section className={styles.chat}>
-      <div className={styles.content}>
+      <div className={styles.content} ref={scrollRef}>
         {chatStorage &&
           chatStorage.map((item, index) => {
             return (
@@ -30,6 +34,11 @@ const Chat = ({ user, chatStorage, sendMsg }) => {
             if (!(event.key == "Enter")) return;
             sendMsg(inputRef.current.value);
             inputRef.current.value = "";
+            scrollRef.current.scrollIntoView({
+              behavior: "smooth",
+              block: "end",
+              inline: "nearest",
+            });
           }}
         />
         <button

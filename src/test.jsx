@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
+import styles from "./test.module.css";
 
-const Test = (props) => {
-  const user = {
-    email: "xo0643",
-    name: "YTY",
-    image: "png",
-    img: "jpg",
+const Test = ({ dbService }) => {
+  const onClick = () => {
+    dbService.update("users/xo0643@naver/linkVideo", "kX0eHza8Zgo");
   };
-  const test = [];
-  console.log(test.length);
-  useEffect(() => {
-    console.log(...Object.entries(user));
-  });
+
   return (
-    <div>
-      <div>d</div>
+    <div className={styles.test}>
+      <iframe
+        className={styles.video}
+        type="text/html"
+        width="100%"
+        height="500px"
+        src={`https://www.youtube.com/embed/kX0eHza8Zgo/?start=61&autoplay=1&mute=1`}
+        frameBorder="0"
+        allowFullScreen
+        start="50"
+      ></iframe>
+      <button className={styles.btn} onClick={onClick}>
+        db
+      </button>
     </div>
   );
 };

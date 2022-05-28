@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./video.module.css";
 
 const Video = ({ video }) => {
+  const [start, setStart] = useState(60);
+
   return (
     <section className={styles.detail}>
       <iframe
@@ -9,7 +11,7 @@ const Video = ({ video }) => {
         type="text/html"
         width="100%"
         height="500px"
-        src={`https://www.youtube.com/embed/${video.id}`}
+        src={`https://www.youtube.com/embed/${video.id}/?start=${start}&autoplay=1&mute=1`}
         frameBorder="0"
         allowFullScreen
         start="50"
@@ -20,9 +22,6 @@ const Video = ({ video }) => {
           <h2 className={styles.channelTitle}>{video.snippet.channelTitle}</h2>
           <pre className={styles.description}>{video.snippet.description}</pre>
         </div>
-        <button className={styles.btn} onClick={() => {}}>
-          같이보기
-        </button>
       </div>
     </section>
   );
